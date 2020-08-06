@@ -41,7 +41,7 @@ import {
   ComputedGetter,
   WritableComputedOptions,
   toRaw
-} from '@vue/reactivity'
+} from '../../reactivity/src/index'
 import {
   ComponentObjectPropsOptions,
   ExtractPropTypes,

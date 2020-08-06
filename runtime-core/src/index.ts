@@ -23,7 +23,7 @@ export {
   shallowReadonly,
   markRaw,
   toRaw
-} from '@vue/reactivity'
+} from '../../reactivity/src/index'
 export { computed } from './apiComputed'
 export { watch, watchEffect } from './apiWatch'
 export {
@@ -130,7 +130,7 @@ export {
   WritableComputedOptions,
   ToRefs,
   DeepReadonly
-} from '@vue/reactivity'
+} from '../../reactivity/src/index'
 export {
   // types
   WatchEffect,

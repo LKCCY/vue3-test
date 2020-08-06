@@ -10,7 +10,7 @@ import { ComponentPublicInstance } from './componentProxy'
 import { createVNode } from './vnode'
 import { defineComponent } from './apiDefineComponent'
 import { warn } from './warning'
-import { ref } from '@vue/reactivity'
+import { ref } from '../../reactivity/src/index'
 import { handleError, ErrorCodes } from './errorHandling'
 
 export type AsyncComponentResolveResult<T = PublicAPIComponent> =

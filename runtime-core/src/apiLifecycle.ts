@@ -9,7 +9,7 @@ import { ComponentPublicInstance } from './componentProxy'
 import { callWithAsyncErrorHandling, ErrorTypeStrings } from './errorHandling'
 import { warn } from './warning'
 import { capitalize } from '@vue/shared'
-import { pauseTracking, resetTracking, DebuggerEvent } from '@vue/reactivity'
+import { pauseTracking, resetTracking, DebuggerEvent } from '../../reactivity/src/index'
 
 export { onActivated, onDeactivated } from './components/KeepAlive'
 

@@ -3,7 +3,7 @@ import {
   shallowReactive,
   trigger,
   TriggerOpTypes
-} from '@vue/reactivity'
+} from '../../reactivity/src/index'
 import {
   EMPTY_OBJ,
   camelize,

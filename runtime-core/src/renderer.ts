@@ -42,7 +42,7 @@ import {
   flushPostFlushCbs,
   invalidateJob
 } from './scheduler'
-import { effect, stop, ReactiveEffectOptions, isRef } from '@vue/reactivity'
+import { effect, stop, ReactiveEffectOptions, isRef } from '../../reactivity/src/index'
 import { updateProps } from './componentProps'
 import { updateSlots } from './componentSlots'
 import { pushWarningContext, popWarningContext, warn } from './warning'

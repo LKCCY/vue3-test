@@ -5,7 +5,7 @@ import {
   resetTracking,
   shallowReadonly,
   proxyRefs
-} from '@vue/reactivity'
+} from '../../reactivity/src/index'
 import {
   CreateComponentPublicInstance,
   ComponentPublicInstance,

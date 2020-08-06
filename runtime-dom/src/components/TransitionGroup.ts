@@ -20,7 +20,7 @@ import {
   onUpdated,
   SetupContext
 } from '@vue/runtime-core'
-import { toRaw } from '@vue/reactivity'
+import { toRaw } from '../../../reactivity/src/index'
 import { extend } from '@vue/shared'
 
 interface Position {

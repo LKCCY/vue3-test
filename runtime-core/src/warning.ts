@@ -6,7 +6,7 @@ import {
   formatComponentName
 } from './component'
 import { isString, isFunction } from '@vue/shared'
-import { toRaw, isRef, pauseTracking, resetTracking } from '@vue/reactivity'
+import { toRaw, isRef, pauseTracking, resetTracking } from '../../reactivity/src/index'
 import { callWithErrorHandling, ErrorCodes } from './errorHandling'
 
 type ComponentVNode = VNode & {

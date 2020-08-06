@@ -17,7 +17,7 @@ import {
   track,
   TrackOpTypes,
   ShallowUnwrapRef
-} from '@vue/reactivity'
+} from '../../reactivity/src/index'
 import {
   ExtractComputedReturns,
   ComponentOptionsBase,

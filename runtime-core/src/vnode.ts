@@ -19,7 +19,7 @@ import {
   ClassComponent
 } from './component'
 import { RawSlots } from './componentSlots'
-import { isProxy, Ref, toRaw } from '@vue/reactivity'
+import { isProxy, Ref, toRaw } from '../../reactivity/src/index'
 import { AppContext } from './apiCreateApp'
 import {
   SuspenseImpl,

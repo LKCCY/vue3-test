@@ -6,7 +6,7 @@ import {
   ComputedRef,
   ReactiveEffectOptions,
   isReactive
-} from '@vue/reactivity'
+} from '../../reactivity/src/index'
 import { queueJob, SchedulerJob } from './scheduler'
 import {
   EMPTY_OBJ,
