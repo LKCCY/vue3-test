@@ -4,7 +4,7 @@ import {
   h,
   warn,
   FunctionalComponent
-} from '@vue/runtime-core'
+} from '../../../runtime-core/src/index'
 import { isObject, toNumber, extend } from '@vue/shared'
 
 const TRANSITION = 'transition'

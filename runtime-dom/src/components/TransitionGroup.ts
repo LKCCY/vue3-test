@@ -19,7 +19,7 @@ import {
   createVNode,
   onUpdated,
   SetupContext
-} from '@vue/runtime-core'
+} from '../../../runtime-core/src/index'
 import { toRaw } from '../../../reactivity/src/index'
 import { extend } from '@vue/shared'
 

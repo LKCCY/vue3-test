@@ -2,7 +2,7 @@ import { isArray } from '@vue/shared'
 import {
   ComponentInternalInstance,
   callWithAsyncErrorHandling
-} from '@vue/runtime-core'
+} from '../../../runtime-core/src/index'
 // import { ErrorCodes } from 'packages/runtime-core/src/errorHandling'
 import { ErrorCodes } from '../../../runtime-core/src/errorHandling'
 

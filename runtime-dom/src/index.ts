@@ -8,7 +8,7 @@ import {
   HydrationRenderer,
   App,
   RootHydrateFunction
-} from '@vue/runtime-core'
+} from '../../runtime-core/src/index'
 import { nodeOps } from './nodeOps'
 import { patchProp, forcePatchProp } from './patchProp'
 // Importing from the compiler, will be tree-shaken in prod
@@ -30,12 +30,14 @@ let renderer: Renderer<Element> | HydrationRenderer
 let enabledHydration = false
 
 function ensureRenderer() {
+  // @ts-ignore
   return renderer || (renderer = createRenderer<Node, Element>(rendererOptions))
 }
 
 function ensureHydrationRenderer() {
   renderer = enabledHydration
     ? renderer
+    // @ts-ignore
     : createHydrationRenderer(rendererOptions)
   enabledHydration = true
   return renderer as HydrationRenderer
@@ -138,4 +140,4 @@ export { vShow } from './directives/vShow'
 
 // re-export everything from core
 // h, Component, reactivity API, nextTick, flags & types
-export * from '@vue/runtime-core'
+export * from '../../runtime-core/src/index'

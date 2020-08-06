@@ -1,5 +1,5 @@
 import { isString, hyphenate, capitalize } from '@vue/shared'
-import { camelize } from '@vue/runtime-core'
+import { camelize } from '../../../runtime-core/src/index'
 
 type Style = string | Partial<CSSStyleDeclaration> | null
 

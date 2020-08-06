@@ -4,7 +4,7 @@ import {
   DirectiveHook,
   DirectiveBinding,
   warn
-} from '@vue/runtime-core'
+} from '../../../runtime-core/src/index'
 import { addEventListener } from '../modules/events'
 import {
   isArray,

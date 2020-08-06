@@ -4,7 +4,7 @@ import { patchAttr } from './modules/attrs'
 import { patchDOMProp } from './modules/props'
 import { patchEvent } from './modules/events'
 import { isOn, isString, isFunction, isModelListener } from '@vue/shared'
-import { RendererOptions } from '@vue/runtime-core'
+import { RendererOptions } from '../../runtime-core/src/index'
 
 const nativeOnRE = /^on[a-z]/
 
@@ -36,6 +36,7 @@ export const patchProp: DOMRendererOptions['patchProp'] = (
       if (isOn(key)) {
         // ignore v-model listeners
         if (!isModelListener(key)) {
+          // @ts-ignore
           patchEvent(el, key, prevValue, nextValue, parentComponent)
         }
       } else if (shouldSetAsProp(el, key, nextValue, isSVG)) {

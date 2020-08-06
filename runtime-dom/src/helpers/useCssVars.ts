@@ -7,7 +7,7 @@ import {
   VNode,
   Fragment,
   unref
-} from '@vue/runtime-core'
+} from '../../../runtime-core/src/index'
 import { ShapeFlags } from '@vue/shared'
 
 export function useCssVars(
