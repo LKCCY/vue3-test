@@ -242,6 +242,7 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
         return setupState[key]
       } else if (data !== EMPTY_OBJ && hasOwn(data, key)) {
         accessCache![key] = AccessTypes.DATA
+        
         return data[key]
       } else if (
         // only cache other properties when instance has declared (thus stable)
@@ -407,6 +408,7 @@ export const RuntimeCompiledPublicInstanceProxyHandlers = extend(
 // for easier console inspection. In prod mode it will be an empty object so
 // these properties definitions can be skipped.
 export function createRenderContext(instance: ComponentInternalInstance) {
+  // return target  // instance.proxy = nex Proxy(instance, PublicInstanceProxyHandlers)
   const target: Record<string, any> = {}
 
   // expose internal instance for proxy handlers

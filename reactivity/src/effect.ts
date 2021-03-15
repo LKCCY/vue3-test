@@ -80,15 +80,18 @@ function createReactiveEffect<T = any>(
   fn: () => T,
   options: ReactiveEffectOptions
 ): ReactiveEffect<T> {
+  // effect 当中闭包有 fn 引用
   const effect = function reactiveEffect(): unknown {
     if (!effect.active) {
       return options.scheduler ? undefined : fn()
     }
+    // fn 执行完毕后 从 effectStack 中排除，并设置当前 activeEffect，供 track 和 effect使用
     if (!effectStack.includes(effect)) {
       cleanup(effect)
       try {
         enableTracking()
         effectStack.push(effect)
+        // activeEffect
         activeEffect = effect
         return fn()
       } finally {
@@ -224,6 +227,7 @@ export function trigger(
         oldTarget
       })
     }
+    // render 当中注入调度器 scheduler 对应 queueJob
     if (effect.options.scheduler) {
       effect.options.scheduler(effect)
     } else {

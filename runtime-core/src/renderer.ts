@@ -12,17 +12,20 @@ import {
   VNodeNormalizedRef,
   VNodeHook
 } from './vnode'
+
 import {
   ComponentInternalInstance,
   createComponentInstance,
   Data,
   setupComponent
 } from './component'
+
 import {
   renderComponentRoot,
   shouldUpdateComponent,
   updateHOCHostEl
 } from './componentRenderUtils'
+
 import {
   isString,
   EMPTY_OBJ,
@@ -36,12 +39,14 @@ import {
   invokeArrayFns,
   isArray
 } from '@vue/shared'
+
 import {
   queueJob,
   queuePostFlushCb,
   flushPostFlushCbs,
   invalidateJob
 } from './scheduler'
+
 import { effect, stop, ReactiveEffectOptions, isRef } from '../../reactivity/src/index'
 import { updateProps } from './componentProps'
 import { updateSlots } from './componentSlots'
@@ -259,11 +264,13 @@ const prodEffectOptions = {
   scheduler: queueJob
 }
 
+// scheduler 调度器
 function createDevEffectOptions(
   instance: ComponentInternalInstance
 ): ReactiveEffectOptions {
   return {
     scheduler: queueJob,
+    // invokeArrayFns fn.forEach(f => f(e))
     onTrack: instance.rtc ? e => invokeArrayFns(instance.rtc!, e) : void 0,
     onTrigger: instance.rtg ? e => invokeArrayFns(instance.rtg!, e) : void 0
   }
@@ -419,11 +426,13 @@ function baseCreateRenderer(
     optimized = false
   ) => {
     // patching & not same type, unmount old tree
+    // n1.type === n2.type && n1.key === n2.key
     if (n1 && !isSameVNodeType(n1, n2)) {
       anchor = getNextHostNode(n1)
       unmount(n1, parentComponent, parentSuspense, true)
       n1 = null
     }
+
 
     if (n2.patchFlag === PatchFlags.BAIL) {
       optimized = false
@@ -431,6 +440,7 @@ function baseCreateRenderer(
     }
 
     const { type, ref, shapeFlag } = n2
+
     switch (type) {
       case Text:
         processText(n1, n2, container, anchor)
@@ -621,7 +631,7 @@ function baseCreateRenderer(
     }
     hostRemove(vnode.anchor!)
   }
-
+  // mount or patch element
   const processElement = (
     n1: VNode | null,
     n2: VNode,
@@ -703,8 +713,10 @@ function baseCreateRenderer(
       }
 
       // props
+      // such as bind event onto el
       if (props) {
         for (const key in props) {
+          // key,ref,onVnodeBeforeMount,onVnodeMounted,onVnodeBeforeUpdate,onVnodeUpdated,onVnodeBeforeUnmount,onVnodeUnmounted
           if (!isReservedProp(key)) {
             hostPatchProp(
               el,
@@ -723,6 +735,7 @@ function baseCreateRenderer(
           invokeVNodeHook(vnodeHook, parentComponent, vnode)
         }
       }
+      // dirs for direactive
       if (dirs) {
         invokeDirectiveHook(vnode, null, parentComponent, 'beforeMount')
       }
@@ -743,6 +756,8 @@ function baseCreateRenderer(
       }
     }
 
+    // get el insert into container
+    // for anchor is el, mark the position the el will insert 
     hostInsert(el, container, anchor)
     // #1583 For inside suspense + suspense not resolved case, enter hook should call when suspense resolved
     // #1689 For inside suspense + suspense resolved case, just call it
@@ -790,6 +805,7 @@ function baseCreateRenderer(
     }
   }
 
+  // patch element
   const patchElement = (
     n1: VNode,
     n2: VNode,
@@ -1108,6 +1124,7 @@ function baseCreateRenderer(
     }
   }
 
+  // mount or update component
   const processComponent = (
     n1: VNode | null,
     n2: VNode,
@@ -1152,6 +1169,7 @@ function baseCreateRenderer(
     isSVG,
     optimized
   ) => {
+    // 若 vnode 为组件，则vnode 挂载component 属性
     const instance: ComponentInternalInstance = (initialVNode.component = createComponentInstance(
       initialVNode,
       parentComponent,
@@ -1176,6 +1194,8 @@ function baseCreateRenderer(
     if (__DEV__) {
       startMeasure(instance, `init`)
     }
+    // initProps,initSlots for STATEFUL_COMPONENT
+    // set render-fun on instance
     setupComponent(instance)
     if (__DEV__) {
       endMeasure(instance, `init`)
@@ -1198,7 +1218,6 @@ function baseCreateRenderer(
       }
       return
     }
-
     setupRenderEffect(
       instance,
       initialVNode,
@@ -1250,6 +1269,7 @@ function baseCreateRenderer(
     }
   }
 
+  // instance update use effect to watch
   const setupRenderEffect: SetupRenderEffectFn = (
     instance,
     initialVNode,
@@ -1268,6 +1288,7 @@ function baseCreateRenderer(
         if (__DEV__) {
           startMeasure(instance, `render`)
         }
+        // get render 中渲染的 vnode节点
         const subTree = (instance.subTree = renderComponentRoot(instance))
         if (__DEV__) {
           endMeasure(instance, `render`)
@@ -1298,18 +1319,20 @@ function baseCreateRenderer(
           if (__DEV__) {
             startMeasure(instance, `patch`)
           }
+          // 初次渲染 最外层组件还没有 el，没有挂载，开始挂载
           patch(
             null,
             subTree,
             container,
             anchor,
-            instance,
+            instance, // 将组件实例作为 subTree 的 parent
             parentSuspense,
             isSVG
           )
           if (__DEV__) {
             endMeasure(instance, `patch`)
           }
+          // 挂载完毕后 标识挂载完毕
           initialVNode.el = subTree.el
         }
         // mounted hook
@@ -1329,6 +1352,7 @@ function baseCreateRenderer(
         ) {
           queuePostRenderEffect(a, parentSuspense)
         }
+        // mark isMounted true
         instance.isMounted = true
       } else {
         // updateComponent
@@ -1349,6 +1373,9 @@ function baseCreateRenderer(
         if (__DEV__) {
           startMeasure(instance, `render`)
         }
+
+        // create nextTree, 相当于 重新patch render函数
+        // 为什么render 要使用函数，保持对 原先的引用，因为使用了闭包环境，value变化之后，可以直接拿到最新值
         const nextTree = renderComponentRoot(instance)
         if (__DEV__) {
           endMeasure(instance, `render`)
@@ -1372,17 +1399,19 @@ function baseCreateRenderer(
         if (__DEV__) {
           startMeasure(instance, `patch`)
         }
+        // patch 渲染
         patch(
           prevTree,
           nextTree,
           // parent may have changed if it's in a teleport
           hostParentNode(prevTree.el!)!,
           // anchor may have changed if it's in a fragment
-          getNextHostNode(prevTree),
+          getNextHostNode(prevTree), // common: el.nextSibling
           instance,
           parentSuspense,
           isSVG
         )
+
         if (__DEV__) {
           endMeasure(instance, `patch`)
         }
@@ -1431,6 +1460,8 @@ function baseCreateRenderer(
     updateSlots(instance, nextVNode.children)
   }
 
+  // for element children maybe is the text
+  // update for children
   const patchChildren: PatchChildrenFn = (
     n1,
     n2,
@@ -1485,6 +1516,7 @@ function baseCreateRenderer(
         unmountChildren(c1 as VNode[], parentComponent, parentSuspense)
       }
       if (c2 !== c1) {
+        // setElementText
         hostSetElementText(container, c2 as string)
       }
     } else {
@@ -2116,6 +2148,7 @@ function baseCreateRenderer(
     }
   }
 
+  // 组件渲染得方法
   const render: RootRenderFunction = (vnode, container) => {
     if (vnode == null) {
       if (container._vnode) {
@@ -2125,6 +2158,7 @@ function baseCreateRenderer(
       patch(container._vnode || null, vnode, container)
     }
     flushPostFlushCbs()
+    // container 始终记录 前一个状态 vnode 作为 patch 根据
     container._vnode = vnode
   }
 

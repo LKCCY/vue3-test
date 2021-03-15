@@ -498,6 +498,7 @@ function setupStatefulComponent(
 
     currentInstance = instance
     pauseTracking()
+    // 执行 setup(args [shallowReadonly, setupContext]) setup(props,_context) _context instance.attrs / slots
     const setupResult = callWithErrorHandling(
       setup,
       instance,
@@ -531,6 +532,8 @@ function setupStatefulComponent(
   }
 }
 
+// 若返回函数 则认为是渲染函数 setup 与 jsx得结合
+// 若渲染数据为响应数据,isObject 天然保持原有得引用
 export function handleSetupResult(
   instance: ComponentInternalInstance,
   setupResult: unknown,
@@ -577,6 +580,7 @@ export function registerRuntimeCompiler(_compile: any) {
   compile = _compile
 }
 
+// 保证
 function finishComponentSetup(
   instance: ComponentInternalInstance,
   isSSR: boolean
@@ -594,6 +598,7 @@ function finishComponentSetup(
       if (__DEV__) {
         startMeasure(instance, `compile`)
       }
+      // 基于模板得编译
       Component.render = compile(Component.template, {
         isCustomElement: instance.appContext.config.isCustomElement,
         delimiters: Component.delimiters

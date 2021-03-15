@@ -37,6 +37,7 @@ export function markAttrsAccessed() {
   accessedAttrs = true
 }
 
+// render component from root intance (mount or update)
 export function renderComponentRoot(
   instance: ComponentInternalInstance
 ): VNode {
@@ -62,12 +63,17 @@ export function renderComponentRoot(
   if (__DEV__) {
     accessedAttrs = false
   }
+
   try {
     let fallthroughAttrs
     if (vnode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
       // withProxy is a proxy with a different `has` trap only for
       // runtime-compiled render functions using `with` block.
       const proxyToUse = withProxy || proxy
+      // 执行函数，挂载子节点
+      // 若没有渲染过 即 vnode.el = null 直接返回 setUp 中渲染的 vnode 节点
+      // 若 update 阶段返回 cloneNode(node)
+      // render 完成 effect 中的track
       result = normalizeVNode(
         render!.call(
           proxyToUse,
@@ -77,8 +83,8 @@ export function renderComponentRoot(
           setupState,
           data,
           ctx
+          )
         )
-      )
       fallthroughAttrs = attrs
     } else {
       // functional

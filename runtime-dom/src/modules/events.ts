@@ -99,6 +99,7 @@ function parseName(name: string): [string, EventListenerOptions | undefined] {
   return [name.slice(2).toLowerCase(), options]
 }
 
+// invoker 召唤者
 function createInvoker(
   initialValue: EventValue,
   instance: ComponentInternalInstance | null

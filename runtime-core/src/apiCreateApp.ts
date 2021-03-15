@@ -117,7 +117,6 @@ export function createAppAPI<HostElement>(
       __DEV__ && warn(`root props passed to app.mount() must be an object.`)
       rootProps = null
     }
-
     const context = createAppContext()
     const installedPlugins = new Set()
 
@@ -207,10 +206,13 @@ export function createAppAPI<HostElement>(
       },
 
       mount(rootContainer: HostElement, isHydrate?: boolean): any {
+        // createApp 中提取组件, 若没有渲染函数 提取根节点下的 template
         if (!isMounted) {
           const vnode = createVNode(rootComponent as Component, rootProps)
           // store app context on the root VNode.
           // this will be set on the root instance on initial mount.
+
+          // vnode 拥有 app得上下文
           vnode.appContext = context
 
           // HMR root reload
@@ -223,6 +225,7 @@ export function createAppAPI<HostElement>(
           if (isHydrate && hydrate) {
             hydrate(vnode as VNode<Node, Element>, rootContainer as any)
           } else {
+            // mount
             render(vnode, rootContainer)
           }
           isMounted = true

@@ -21,7 +21,7 @@ import { isFunction, isString, isHTMLTag, isSVGTag, extend } from '@vue/shared'
 //   }
 // }
 
-const rendererOptions = extend({ patchProp, forcePatchProp }, nodeOps)
+export const rendererOptions = extend({ patchProp, forcePatchProp }, nodeOps)
 
 // lazy create the renderer - this makes core renderer logic tree-shakable
 // in case the user only imports reactivity utilities from Vue.
@@ -31,6 +31,7 @@ let enabledHydration = false
 
 function ensureRenderer() {
   // @ts-ignore
+  // rendererOptions 定义dom 操作方法及 patch 方法
   return renderer || (renderer = createRenderer<Node, Element>(rendererOptions))
 }
 
@@ -60,11 +61,14 @@ export const createApp = ((...args) => {
   }
 
   const { mount } = app
+  // 对原先功能做了一层 装饰
   app.mount = (containerOrSelector: Element | string): any => {
     const container = normalizeContainer(containerOrSelector)
     if (!container) return
+    // 将 createApp() 中的第一个参数均被列为 _component
     const component = app._component
     if (!isFunction(component) && !component.render && !component.template) {
+      // 可以直接在 <div id="app"><custom></custom></div>
       component.template = container.innerHTML
     }
     // clear content before mounting

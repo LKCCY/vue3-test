@@ -295,6 +295,7 @@ export const createVNode = (__DEV__
   ? createVNodeWithArgsTransform
   : _createVNode) as typeof _createVNode
 
+  // TODO: 12
 function _createVNode(
   type: VNodeTypes | ClassComponent | typeof NULL_DYNAMIC_COMPONENT,
   props: (Data & VNodeProps) | null = null,
@@ -309,7 +310,7 @@ function _createVNode(
     }
     type = Comment
   }
-
+  // __v_isVNode
   if (isVNode(type)) {
     const cloned = cloneVNode(type, props)
     if (children) {
@@ -516,6 +517,8 @@ export function normalizeVNode(child: VNodeChild): VNode {
   } else if (typeof child === 'object') {
     // already vnode, this should be the most common since compiled templates
     // always produce all-vnode children arrays
+    // or from setUp component renderComponentRoot
+    // TODO: 渲染之后 child 中的 el 没有办法枚举
     return child.el === null ? child : cloneVNode(child)
   } else {
     // strings and numbers
@@ -528,6 +531,7 @@ export function cloneIfMounted(child: VNode): VNode {
   return child.el === null ? child : cloneVNode(child)
 }
 
+// 统一 node 格式，为 type 打标
 export function normalizeChildren(vnode: VNode, children: unknown) {
   let type = 0
   const { shapeFlag } = vnode

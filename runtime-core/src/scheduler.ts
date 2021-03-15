@@ -30,11 +30,14 @@ let pendingPostFlushIndex = 0
 const RECURSION_LIMIT = 100
 type CountMap = Map<SchedulerJob | Function, number>
 
+// @_@ 发现 nextTick
 export function nextTick(fn?: () => void): Promise<void> {
   const p = currentFlushPromise || resolvedPromise
   return fn ? p.then(fn) : p
 }
 
+
+// effect 中的调度器
 export function queueJob(job: SchedulerJob) {
   // the dedupe search uses the startIndex argument of Array.includes()
   // by default the search index includes the current job that is being run
@@ -83,6 +86,7 @@ export function queuePostFlushCb(cb: Function | Function[]) {
 function queueFlush() {
   if (!isFlushing && !isFlushPending) {
     isFlushPending = true
+    // get flush promise
     currentFlushPromise = resolvedPromise.then(flushJobs)
   }
 }
@@ -127,6 +131,8 @@ function flushJobs(seen?: CountMap) {
   //    its update can be skipped.
   // Jobs can never be null before flush starts, since they are only invalidated
   // during execution of another flushed job.
+
+  // effectid come from track()
   queue.sort((a, b) => getId(a!) - getId(b!))
 
   try {
@@ -136,6 +142,7 @@ function flushJobs(seen?: CountMap) {
         if (__DEV__) {
           checkRecursiveUpdates(seen!, job)
         }
+        // 执行job
         callWithErrorHandling(job, null, ErrorCodes.SCHEDULER)
       }
     }
@@ -154,6 +161,7 @@ function flushJobs(seen?: CountMap) {
   }
 }
 
+// 控制调用栈长度 Maximum recursive
 function checkRecursiveUpdates(seen: CountMap, fn: SchedulerJob | Function) {
   if (!seen.has(fn)) {
     seen.set(fn, 1)

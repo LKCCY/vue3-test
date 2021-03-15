@@ -42,9 +42,11 @@ export function shallowRef(value?: unknown) {
 }
 
 function createRef(rawValue: unknown, shallow = false) {
+  // r.__v_isRef = true
   if (isRef(rawValue)) {
     return rawValue
   }
+  // convert isObject(val) ? reactive(val) : val
   let value = shallow ? rawValue : convert(rawValue)
   const r = {
     __v_isRef: true,

@@ -133,6 +133,7 @@ export function h<P>(
 ): VNode
 
 // Actual implementation
+// createVnode by h, and then rendered by render fun
 export function h(type: any, propsOrChildren?: any, children?: any): VNode {
   if (arguments.length === 2) {
     if (isObject(propsOrChildren) && !isArray(propsOrChildren)) {
